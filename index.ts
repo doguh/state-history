@@ -34,6 +34,15 @@ export interface IStateHistory<T> {
    * moves the pointer in the history stack by `i` entries
    * @param i
    */
+  go(i: number): T;
+  /**
+   * get a specific entry from the history stack
+   *
+   * ie:
+   * `-1` for the previous entry, `1` for the next entry
+   *
+   * @param i
+   */
   get(i: number): T;
 }
 
