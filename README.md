@@ -15,7 +15,7 @@ history.push({ a: 3 }); // current history is { a: 3 }
 
 history.goPrev(); // current history is now { a: 2 }
 history.goNext(); // current history is now { a: 3 }
-history.go(-2); // current history is now { a: 1}
+history.go(-2); // current history is now { a: 1 }
 
 // create history emitter
 const historyEmitter = new StateHistoryEmitter();
