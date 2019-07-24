@@ -1,18 +1,57 @@
 export interface IStateHistory<T> {
+  /**
+   * number of past states in the history
+   */
   numPrev: number;
+  /**
+   * number of future states in the history
+   */
   numNext: number;
+  /**
+   * push a new entry onto the history stack
+   * @param state
+   */
   push(state: T): void;
+  /**
+   * moves the pointer in the history stack to the previous entry
+   *
+   * equivalent to `go(-1)`
+   */
   goPrev(): T;
+  /**
+   * moves the pointer in the history stack to the next entry
+   *
+   * equivalent to `go(1)`
+   */
   goNext(): T;
+  /**
+   * moves the pointer in the history stack to the last entry
+   *
+   * equivalent to `go(numNext)`
+   */
   goLast(): T;
+  /**
+   * moves the pointer in the history stack by `i` entries
+   * @param i
+   */
   get(i: number): T;
 }
 
 type StateHistorySubscriber<T> = (state: T) => void;
 
 export interface IStateHistoryEmitter<T> extends IStateHistory<T> {
+  /**
+   * register a callback function that will be called every time `push`, or `go` is called
+   */
   subscribe: (callback: StateHistorySubscriber<T>) => void;
+  /**
+   * unregister a callback function
+   */
   unsubscribe: (callback: StateHistorySubscriber<T>) => void;
+  /**
+   * unregister all callback functions
+   */
+  unsubscribeAll: () => void;
 }
 
 export default class StateHistory<T> implements IStateHistory<T> {
