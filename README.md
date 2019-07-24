@@ -1,6 +1,12 @@
 # state-history
 
+[![NPM](https://img.shields.io/npm/v/state-history.svg)](https://www.npmjs.com/package/state-history)
+
 A basic state history manager.
+
+## Install
+
+`npm i state-history`
 
 ## Example
 
