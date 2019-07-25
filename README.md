@@ -11,6 +11,10 @@ A basic state history manager.
 ## Example
 
 ```js
+import StateHistory from 'state-history';
+// or
+const StateHistory = require('state-history');
+
 // create history
 const history = new StateHistory();
 
@@ -23,12 +27,10 @@ history.goPrev(); // current history is now { a: 2 }
 history.goNext(); // current history is now { a: 3 }
 history.go(-2); // current history is now { a: 1 }
 
-// create history emitter
-const historyEmitter = new StateHistoryEmitter();
-
 // listen to history changes
-historyEmitter.subscribe(newState => console.log(newState));
-historyEmitter.push({ a: 1 }); // triggers an history change
+history.subscribe(newState => console.log(newState));
+history.push({ a: 1 }); // triggers an history change
+history.goPrev(); // also triggers an history change
 ```
 
 ## TODO
