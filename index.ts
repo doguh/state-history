@@ -9,30 +9,39 @@ export interface IStateHistory<T> {
   numNext: number;
   /**
    * push a new entry onto the history stack
-   * @param state
+   * @param state the new entry to push
+   * @returns {T} the new current state
    */
-  push(state: T): void;
+  push(state: T): T;
   /**
    * moves the pointer in the history stack to the previous entry
    *
    * equivalent to `go(-1)`
+   *
+   * @returns {T} the new current state
    */
   goPrev(): T;
   /**
    * moves the pointer in the history stack to the next entry
    *
    * equivalent to `go(1)`
+   *
+   * @returns {T} the new current state
    */
   goNext(): T;
   /**
    * moves the pointer in the history stack to the last entry
    *
    * equivalent to `go(numNext)`
+   *
+   * @returns {T} the new current state
    */
   goLast(): T;
   /**
    * moves the pointer in the history stack by `i` entries
    * @param i
+   * a negative number will go to the `-i`th previous entry
+   * and a positive number will go to the `i`th next entry
    */
   go(i: number): T;
   /**
@@ -42,15 +51,14 @@ export interface IStateHistory<T> {
    * `-1` for the previous entry, `1` for the next entry
    *
    * @param i
+   * a negative number will get the `-i`th previous entry
+   * and a positive number will get the `i`th next entry
+   * @returns {T} the new current state
    */
   get(i: number): T;
-}
-
-type StateHistorySubscriber<T> = (state: T) => void;
-
-export interface IStateHistoryEmitter<T> extends IStateHistory<T> {
   /**
-   * register a callback function that will be called every time `push`, or `go` is called
+   * register a callback function that will be called every time
+   * a new entry is added or when the pointer in the history stack is moved
    */
   subscribe: (callback: StateHistorySubscriber<T>) => void;
   /**
@@ -63,12 +71,15 @@ export interface IStateHistoryEmitter<T> extends IStateHistory<T> {
   unsubscribeAll: () => void;
 }
 
+type StateHistorySubscriber<T> = (state: T) => void;
+
 export default class StateHistory<T> implements IStateHistory<T> {
   public maxLength: number;
 
   private past: T[] = [];
   private present: T = null;
   private future: T[] = [];
+  private subscribers: StateHistorySubscriber<T>[] = [];
 
   constructor(maxLength: number = 50) {
     this.maxLength = maxLength;
@@ -82,13 +93,15 @@ export default class StateHistory<T> implements IStateHistory<T> {
     return this.future.length;
   }
 
-  push(state: T): void {
+  push(state: T): T {
     if (this.present) this.past.push(this.present);
     this.present = state;
     if (this.future.length) this.future = [];
     if (this.past.length > this.maxLength) {
       this.past.splice(0, this.past.length - this.maxLength);
     }
+    this.emit(this.present);
+    return this.present;
   }
 
   goPrev(): T {
@@ -96,6 +109,7 @@ export default class StateHistory<T> implements IStateHistory<T> {
     const newPresent = this.past.pop();
     this.future.splice(0, 0, this.present);
     this.present = newPresent;
+    this.emit(this.present);
     return this.present;
   }
 
@@ -103,6 +117,7 @@ export default class StateHistory<T> implements IStateHistory<T> {
     const newPresent = this.future.shift();
     this.past.push(this.present);
     this.present = newPresent;
+    this.emit(this.present);
     return this.present;
   }
 
@@ -110,6 +125,7 @@ export default class StateHistory<T> implements IStateHistory<T> {
     const newPresent = this.future.pop();
     this.past.push(...this.future);
     this.present = newPresent;
+    this.emit(this.present);
     return this.present;
   }
 
@@ -121,6 +137,7 @@ export default class StateHistory<T> implements IStateHistory<T> {
       const newPresent = this.future.splice(i - 1, 1)[0];
       this.past = [...this.past, this.present, ...this.future.splice(0, i - 1)];
       this.present = newPresent;
+      this.emit(this.present);
       return this.present;
     } else {
       const start = this.past.length + i;
@@ -131,6 +148,7 @@ export default class StateHistory<T> implements IStateHistory<T> {
         ...this.future,
       ];
       this.present = newPresent;
+      this.emit(this.present);
       return this.present;
     }
   }
@@ -145,11 +163,6 @@ export default class StateHistory<T> implements IStateHistory<T> {
       return this.past[this.past.length + i];
     }
   }
-}
-
-export class StateHistoryEmitter<T> extends StateHistory<T>
-  implements IStateHistoryEmitter<T> {
-  private subscribers: StateHistorySubscriber<T>[] = [];
 
   subscribe(callback: StateHistorySubscriber<T>): void {
     this.subscribers.push(callback);
@@ -168,34 +181,5 @@ export class StateHistoryEmitter<T> extends StateHistory<T>
 
   private emit(state: T): void {
     this.subscribers.forEach(callback => callback(state));
-  }
-
-  push(state: T): void {
-    super.push(state);
-    this.emit(state);
-  }
-
-  goPrev(): T {
-    const state = super.goPrev();
-    this.emit(state);
-    return state;
-  }
-
-  goNext(): T {
-    const state = super.goNext();
-    this.emit(state);
-    return state;
-  }
-
-  goLast(): T {
-    const state = super.goLast();
-    this.emit(state);
-    return state;
-  }
-
-  go(i: number): T {
-    const state = super.go(i);
-    this.emit(state);
-    return state;
   }
 }
