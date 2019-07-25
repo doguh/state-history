@@ -74,6 +74,11 @@ interface IStateHistory<T> {
 type StateHistorySubscriber<T> = (state: T) => void;
 
 export class StateHistory<T> implements IStateHistory<T> {
+  /**
+   * maximum number of entries that should be stored
+   *
+   * if the number of entries exceeds this number, oldest entries will be removed
+   */
   public maxLength: number;
 
   private past: T[] = [];
@@ -81,6 +86,10 @@ export class StateHistory<T> implements IStateHistory<T> {
   private future: T[] = [];
   private subscribers: StateHistorySubscriber<T>[] = [];
 
+  /**
+   * create a new StateHistory
+   * @param maxLength maximum number of entries that should be stored (default=50)
+   */
   constructor(maxLength: number = 50) {
     this.maxLength = maxLength;
   }
