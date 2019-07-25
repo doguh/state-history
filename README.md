@@ -11,9 +11,9 @@ A basic state history manager.
 ## Example
 
 ```js
-import StateHistory from 'state-history';
+import { StateHistory } from 'state-history';
 // or
-const StateHistory = require('state-history');
+const { StateHistory } = require('state-history');
 
 // create history
 const history = new StateHistory();

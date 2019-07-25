@@ -1,4 +1,4 @@
-export interface IStateHistory<T> {
+interface IStateHistory<T> {
   /**
    * number of past states in the history
    */
@@ -73,7 +73,7 @@ export interface IStateHistory<T> {
 
 type StateHistorySubscriber<T> = (state: T) => void;
 
-export default class StateHistory<T> implements IStateHistory<T> {
+export class StateHistory<T> implements IStateHistory<T> {
   public maxLength: number;
 
   private past: T[] = [];

@@ -1,1 +1,3 @@
-module.exports = require('./dist/cjs/index').default;
+const d = require('./dist/cjs/index').default;
+console.log({ d });
+module.exports = d;
