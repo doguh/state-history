@@ -2,3 +2,5 @@
 .prettierrc
 index.ts
 tsconfig.json
+.nyc_output
+coverage

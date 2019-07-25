@@ -35,5 +35,4 @@ history.goPrev(); // also triggers an history change
 
 ## TODO
 
-- Write tests
 - Write API doc

@@ -6,5 +6,6 @@
     "declaration": true,
     "strict": true,
     "strictNullChecks": false
-  }
+  },
+  "exclude": ["*.test.ts"]
 }
