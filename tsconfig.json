@@ -7,5 +7,5 @@
     "strict": true,
     "strictNullChecks": false
   },
-  "exclude": ["dist", "*.test.ts"]
+  "include": ["./index.ts"]
 }
