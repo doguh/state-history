@@ -8,7 +8,7 @@ A basic state history manager.
 
 `npm i state-history`
 
-## Example
+## Basic usage
 
 ```js
 import { StateHistory } from 'state-history';
@@ -33,6 +33,56 @@ history.push({ a: 1 }); // triggers an history change
 history.goPrev(); // also triggers an history change
 ```
 
-## TODO
+## Properties
 
-- Write API doc
+```ts
+// number of past states in the history
+// it should be checked to be greater than 0 before calling `goPrev`
+numPrev: number;
+
+// number of future states in the history
+// it should be checked to be greater than 0 before calling `goNext`
+numNext: number;
+```
+
+## Methods
+
+```ts
+// push a new entry onto the history stack
+// and returns it
+push(state: T): T;
+
+// moves the pointer in the history stack to the previous entry
+// and returns the new current state
+// it is equivalent to `go(-1)`
+goPrev(): T;
+
+// moves the pointer in the history stack to the next entry
+// and returns the new current state
+// it is equivalent to `go(1)`
+goNext(): T;
+
+// moves the pointer in the history stack to the last entry
+// and returns the new current state
+// it is  equivalent to `go(numNext)`
+goLast(): T;
+
+// moves the pointer in the history stack by `i` entries
+// a negative number will go to the `-i`th previous entry
+// and a positive number will go to the `i`th next entry
+go(i: number): T;
+
+// get a specific entry from the history stack
+// ie: `-1` for the previous entry, `1` for the next entry
+get(i: number): T;
+
+// register a callback function that will be called every time
+// a new entry is added or when the pointer in the history stack is moved
+subscribe: (callback: StateHistorySubscriber<T>) => void;
+
+// unregister a callback function
+unsubscribe: (callback: StateHistorySubscriber<T>) => void;
+
+// unregister all callback functions
+unsubscribeAll: () => void;
+```
