@@ -2,9 +2,13 @@
   "name": "state-history",
   "version": "1.0.0",
   "description": "A state history manager",
-  "main": "dist/index.js",
+  "main": "./index.cjs.js",
+  "module": "dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc --module es2015 --outDir ./dist/esm",
+    "build:cjs": "tsc --module commonjs --outDir ./dist/cjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
