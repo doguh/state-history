@@ -1,6 +1,6 @@
 {
   "name": "state-history",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "A state history manager",
   "main": "./dist/index.js",
   "scripts": {
@@ -8,8 +8,9 @@
     "test": "mocha -r ts-node/register *.test.ts",
     "test:coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" mocha -r ts-node/register *.test.ts && nyc report"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "doguh",
+  "license": "MIT",
+  "repository": "doguh/state-history",
   "devDependencies": {
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.7",
