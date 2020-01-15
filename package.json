@@ -1,6 +1,6 @@
 {
   "name": "state-history",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A state history manager",
   "main": "./dist/index.js",
   "scripts": {
