@@ -5,7 +5,8 @@
     "outDir": "./dist",
     "declaration": true,
     "strict": true,
-    "strictNullChecks": false
+    "strictNullChecks": false,
+    "lib": ["es6"]
   },
   "include": ["./index.ts"]
 }
