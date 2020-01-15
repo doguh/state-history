@@ -8,6 +8,7 @@ describe('StateHistory', () => {
 
   beforeEach(() => {
     h = new StateHistory<number>();
+    h.push(0);
     h.push(1);
     h.push(2);
     h.push(3);
@@ -34,9 +35,9 @@ describe('StateHistory', () => {
   });
 
   it('should count past states', () => {
-    expect(h.numPrev).to.equals(2);
+    expect(h.numPrev).to.equals(3);
     h.goPrev();
-    expect(h.numPrev).to.equals(1);
+    expect(h.numPrev).to.equals(2);
   });
 
   it('should count future states', () => {
@@ -63,7 +64,7 @@ describe('StateHistory', () => {
     h.goPrev();
     h.push(5);
     expect(h.numNext).to.equals(0);
-    expect(h.numPrev).to.equals(1);
+    expect(h.numPrev).to.equals(2);
     expect(h.get(0)).to.equals(5);
   });
 
@@ -78,6 +79,14 @@ describe('StateHistory', () => {
     h.push(5);
     expect(h.numPrev).to.equals(3);
     expect(h.get(-3)).to.equal(2);
+  });
+
+  it('should clear history', () => {
+    expect(h.numPrev).to.equal(3);
+    h.clear();
+    expect(h.numPrev).to.equal(0);
+    expect(h.numNext).to.equal(0);
+    expect(h.get(0)).to.equal(undefined);
   });
 });
 

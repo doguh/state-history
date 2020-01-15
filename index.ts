@@ -69,6 +69,10 @@ interface IStateHistory<T> {
    * unregister all callback functions
    */
   unsubscribeAll: () => void;
+  /**
+   * remove all entries
+   */
+  clear(): void;
 }
 
 type StateHistorySubscriber<T> = (state: T) => void;
@@ -82,7 +86,7 @@ export class StateHistory<T> implements IStateHistory<T> {
   public maxLength: number;
 
   private past: T[] = [];
-  private present: T = null;
+  private present: T = undefined;
   private future: T[] = [];
   private subscribers: StateHistorySubscriber<T>[] = [];
 
@@ -103,7 +107,7 @@ export class StateHistory<T> implements IStateHistory<T> {
   }
 
   push(state: T): T {
-    if (this.present) this.past.push(this.present);
+    if (this.present !== undefined) this.past.push(this.present);
     this.present = state;
     if (this.future.length) this.future = [];
     if (this.past.length > this.maxLength) {
@@ -186,6 +190,12 @@ export class StateHistory<T> implements IStateHistory<T> {
 
   unsubscribeAll(): void {
     this.subscribers.length = 0;
+  }
+
+  clear(): void {
+    this.past = [];
+    this.future = [];
+    this.present = undefined;
   }
 
   private emit(state: T): void {

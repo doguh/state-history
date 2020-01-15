@@ -78,11 +78,14 @@ get(i: number): T;
 
 // register a callback function that will be called every time
 // a new entry is added or when the pointer in the history stack is moved
-subscribe: (callback: StateHistorySubscriber<T>) => void;
+subscribe(callback: (state: T) => void): void;
 
 // unregister a callback function
-unsubscribe: (callback: StateHistorySubscriber<T>) => void;
+unsubscribe(callback: (state: T) => void): void;
 
 // unregister all callback functions
-unsubscribeAll: () => void;
+unsubscribeAll(): void;
+
+// remove all entries from the state history
+clear(): void
 ```
